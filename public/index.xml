@@ -13,89 +13,157 @@
         <pubDate>Wed, 14 May 2025 04:57:39 +0800</pubDate>
         
         <guid>http://localhost:1313/p/push-with-different-account/</guid>
-        <description>&lt;p&gt;🧰 方法 3：使用 SSH 管理多个 GitHub 账号
-我们假设：&lt;/p&gt;
-&lt;p&gt;你的旧账号是：olduser&lt;/p&gt;
-&lt;p&gt;你的新账号是：dolly1221&lt;/p&gt;
-&lt;p&gt;想同时提交不同的项目到不同账号的仓库&lt;/p&gt;
-&lt;p&gt;🛠️ 步骤 1：为两个账号生成不同的 SSH key
-打开终端（Git Bash / PowerShell / CMD），执行以下命令：&lt;/p&gt;
-&lt;p&gt;为旧账号生成 SSH key：
-bash
-Copy
-Edit
-ssh-keygen -t ed25519 -C &amp;ldquo;&lt;a class=&#34;link&#34; href=&#34;mailto:olduser@example.com&#34; &gt;olduser@example.com&lt;/a&gt;&amp;rdquo; -f ~/.ssh/id_ed25519_old
-按提示一路回车（除非你想设置密码）&lt;/p&gt;
-&lt;p&gt;为新账号 dolly1221 生成 SSH key：
-bash
-Copy
-Edit
-ssh-keygen -t ed25519 -C &amp;ldquo;&lt;a class=&#34;link&#34; href=&#34;mailto:dolly1221@example.com&#34; &gt;dolly1221@example.com&lt;/a&gt;&amp;rdquo; -f ~/.ssh/id_ed25519_dolly
-每次生成时都用不同的 -f 文件名，防止覆盖。&lt;/p&gt;
-&lt;p&gt;📎 步骤 2：添加 SSH key 到 GitHub
-登录你的两个 GitHub 账号分别做：
-打开 GitHub SSH Key 设置页面&lt;/p&gt;
-&lt;p&gt;点“New SSH Key”&lt;/p&gt;
-&lt;p&gt;Title 写清楚哪个账号用的，比如：MyLaptop - dolly&lt;/p&gt;
-&lt;p&gt;打开对应 key 文件复制内容：&lt;/p&gt;
-&lt;p&gt;bash
-Copy
-Edit&lt;/p&gt;
-&lt;h1 id=&#34;复制旧账号的-key&#34;&gt;复制旧账号的 key
-&lt;/h1&gt;&lt;p&gt;cat ~/.ssh/id_ed25519_old.pub&lt;/p&gt;
-&lt;h1 id=&#34;复制新账号的-key&#34;&gt;复制新账号的 key
-&lt;/h1&gt;&lt;p&gt;cat ~/.ssh/id_ed25519_dolly.pub
-粘贴并保存&lt;/p&gt;
-&lt;p&gt;🛠️ 步骤 3：配置 SSH 使用不同的 key（重点）
-编辑或创建配置文件：&lt;/p&gt;
-&lt;p&gt;bash
-Copy
-Edit
-notepad ~/.ssh/config
-添加以下内容（如果已有就追加）：&lt;/p&gt;
-&lt;p&gt;ssh
-Copy
-Edit&lt;/p&gt;
-&lt;h1 id=&#34;olduser-账号配置&#34;&gt;olduser 账号配置
-&lt;/h1&gt;&lt;p&gt;Host github-old
-HostName github.com
-User git
-IdentityFile ~/.ssh/id_ed25519_old
-IdentitiesOnly yes&lt;/p&gt;
-&lt;h1 id=&#34;dolly1221-账号配置&#34;&gt;dolly1221 账号配置
-&lt;/h1&gt;&lt;p&gt;Host github-dolly
-HostName github.com
-User git
-IdentityFile ~/.ssh/id_ed25519_dolly
-IdentitiesOnly yes
-🧪 步骤 4：测试是否配置成功
-bash
-Copy
-Edit
-ssh -T github-dolly
-如果成功，会显示：&lt;/p&gt;
-&lt;p&gt;rust
-Copy
-Edit
-Hi dolly1221! You&amp;rsquo;ve successfully authenticated&amp;hellip;
-同理：&lt;/p&gt;
-&lt;p&gt;bash
-Copy
-Edit
-ssh -T github-old
-🔗 步骤 5：为项目设置正确的远程地址
-在你的项目目录里，设置远程地址时用 git@github-别名:username/repo.git 的形式：&lt;/p&gt;
-&lt;p&gt;比如你要推送到 dolly1221 账号的仓库：
-bash
-Copy
-Edit
-git remote set-url origin git@github-dolly:dolly1221/dolly1221.github.io.git
-如果是旧账号项目：
-bash
-Copy
-Edit
-git remote set-url origin git@github-old:olduser/some-old-project.git&lt;/p&gt;
-</description>
+        <description>&lt;h2 id=&#34;-方法-3使用-ssh-管理多个-github-账号&#34;&gt;🧰 方法 3：使用 SSH 管理多个 GitHub 账号
+&lt;/h2&gt;&lt;p&gt;我们假设：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;你的旧账号是：olduser&lt;/li&gt;
+&lt;li&gt;你的新账号是：dolly1221&lt;/li&gt;
+&lt;li&gt;想同时提交不同的项目到不同账号的仓库&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;-步骤-1为两个账号生成不同的-ssh-key&#34;&gt;🛠️ 步骤 1：为两个账号生成不同的 SSH key
+&lt;/h2&gt;&lt;p&gt;打开终端（Git Bash / PowerShell / CMD），执行以下命令：&lt;/p&gt;
+&lt;h3 id=&#34;为旧账号生成-ssh-key&#34;&gt;为旧账号生成 SSH key：
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ssh-keygen -t ed25519 -C &lt;span class=&#34;s2&#34;&gt;&amp;#34;olduser@example.com&amp;#34;&lt;/span&gt; -f ~/.ssh/id_ed25519_old
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;按提示一路回车（除非你想设置密码）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;为新账号-dolly1221-生成-ssh-key&#34;&gt;为新账号 dolly1221 生成 SSH key：
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ssh-keygen -t ed25519 -C &lt;span class=&#34;s2&#34;&gt;&amp;#34;dolly1221@example.com&amp;#34;&lt;/span&gt; -f ~/.ssh/id_ed25519_dolly
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;每次生成时都用不同的 -f 文件名，防止覆盖。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;-步骤-2添加-ssh-key-到-github&#34;&gt;📎 步骤 2：添加 SSH key 到 GitHub
+&lt;/h2&gt;&lt;p&gt;登录你的两个 GitHub 账号分别做：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;打开 GitHub SSH Key 设置页面&lt;/li&gt;
+&lt;li&gt;点“New SSH Key”&lt;/li&gt;
+&lt;li&gt;Title 写清楚哪个账号用的，比如：MyLaptop - dolly&lt;/li&gt;
+&lt;li&gt;打开对应 key 文件复制内容：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 复制旧账号的 key&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat ~/.ssh/id_ed25519_old.pub
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 复制新账号的 key&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat ~/.ssh/id_ed25519_dolly.pub
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start=&#34;5&#34;&gt;
+&lt;li&gt;粘贴并保存&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;-步骤-3配置-ssh-使用不同的-key重点&#34;&gt;🛠️ 步骤 3：配置 SSH 使用不同的 key（重点）
+&lt;/h2&gt;&lt;p&gt;编辑或创建配置文件：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;notepad ~/.ssh/config
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;添加以下内容（如果已有就追加）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# olduser 账号配置
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Host github-old
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  HostName github.com
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  User git
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  IdentityFile ~/.ssh/id_ed25519_old
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  IdentitiesOnly yes
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# dolly1221 账号配置
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Host github-dolly
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  HostName github.com
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  User git
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  IdentityFile ~/.ssh/id_ed25519_dolly
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  IdentitiesOnly yes
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;-步骤-4测试是否配置成功&#34;&gt;🧪 步骤 4：测试是否配置成功
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ssh -T github-dolly
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;如果成功，会显示：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Hi&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dolly1221&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;!&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;You&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;&amp;#39;ve&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;successfully&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;authenticated&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;..&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;同理：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ssh -T github-old
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;-步骤-5为项目设置正确的远程地址&#34;&gt;🔗 步骤 5：为项目设置正确的远程地址
+&lt;/h2&gt;&lt;p&gt;在你的项目目录里，设置远程地址时用 git@github-别名:username/repo.git 的形式：&lt;/p&gt;
+&lt;h3 id=&#34;比如你要推送到-dolly1221-账号的仓库&#34;&gt;比如你要推送到 dolly1221 账号的仓库：
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;git remote set-url origin git@github-dolly:dolly1221/dolly1221.github.io.git
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;如果是旧账号项目&#34;&gt;如果是旧账号项目：
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;git remote set-url origin git@github-old:olduser/some-old-project.git
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
         </item>
         <item>
         <title>Hey Dolly</title>
