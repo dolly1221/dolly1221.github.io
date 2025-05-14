@@ -7,7 +7,7 @@ math:
 license: 
 hidden: false
 comments: true
-draft: true
+draft: false
 ---
 
 ## 🧰 方法 3：使用 SSH 管理多个 GitHub 账号
