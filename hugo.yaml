@@ -45,7 +45,7 @@ services:
         id:
 
 pagination:
-    pagerSize: 3
+    pagerSize: 5
 
 permalinks:
     post: /p/:slug/
@@ -200,7 +200,7 @@ params:
         toggle: true
 
         # Available values: auto, light, dark
-        default: auto
+        default: dark
 
     imageProcessing:
         cover:
