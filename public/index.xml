@@ -7,26 +7,23 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Aiden Leee</copyright>
-<<<<<<< HEAD
-        <lastBuildDate>Wed, 14 May 2025 04:57:39 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
-=======
         <lastBuildDate>Thu, 15 May 2025 21:07:07 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Messenger优化</title>
         <link>http://localhost:1313/p/messenger%E4%BC%98%E5%8C%96/</link>
         <pubDate>Thu, 15 May 2025 21:07:07 +0800</pubDate>
         
         <guid>http://localhost:1313/p/messenger%E4%BC%98%E5%8C%96/</guid>
-        <description>&lt;h3 id=&#34;-问题本质&#34;&gt;🔥 问题本质：
-&lt;/h3&gt;&lt;p&gt;可能产生无限调用的情况是：&lt;/p&gt;
+        <description>&lt;h2 id=&#34;-问题本质&#34;&gt;🔥 问题本质：
+&lt;/h2&gt;&lt;p&gt;可能产生无限调用的情况是：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;监听函数A 触发了事件 &lt;code&gt;B&lt;/code&gt;；&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;B&lt;/code&gt; 的监听函数中又广播了 &lt;code&gt;B&lt;/code&gt;；&lt;/li&gt;
 &lt;li&gt;如此反复导致 &lt;strong&gt;无限递归调用&lt;/strong&gt;（非死锁，是&lt;strong&gt;递归栈溢出&lt;/strong&gt;）。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;-解决方案推荐方案由简单到复杂&#34;&gt;✅ 解决方案（推荐方案由简单到复杂）：
-&lt;/h3&gt;&lt;hr&gt;
-&lt;h4 id=&#34;-方案一添加调用栈限制防止重复广播&#34;&gt;✅ 方案一：&lt;strong&gt;添加调用栈限制（防止重复广播）&lt;/strong&gt;
-&lt;/h4&gt;&lt;p&gt;在 &lt;code&gt;MessengerInternal&lt;/code&gt; 中为每个事件维护一个&lt;strong&gt;广播中事件栈&lt;/strong&gt;，广播时检查事件是否正在调用中，若是，则跳过或报错。&lt;/p&gt;
+&lt;h2 id=&#34;-解决方案推荐方案由简单到复杂&#34;&gt;✅ 解决方案（推荐方案由简单到复杂）：
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id=&#34;-方案一添加调用栈限制防止重复广播&#34;&gt;✅ 方案一：&lt;strong&gt;添加调用栈限制（防止重复广播）&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;在 &lt;code&gt;MessengerInternal&lt;/code&gt; 中为每个事件维护一个&lt;strong&gt;广播中事件栈&lt;/strong&gt;，广播时检查事件是否正在调用中，若是，则跳过或报错。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -103,8 +100,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;这个方案可以&lt;strong&gt;防止递归广播同一个事件名&lt;/strong&gt;，并抛出异常提示开发者注意逻辑问题。&lt;/p&gt;
-&lt;h4 id=&#34;-方案二事件队列化延迟广播&#34;&gt;✅ 方案二：&lt;strong&gt;事件队列化（延迟广播）&lt;/strong&gt;
-&lt;/h4&gt;&lt;p&gt;另一种方式是用一个队列存储广播事件，&lt;strong&gt;逐帧或逐层处理&lt;/strong&gt;，不在广播过程中直接调用 listener，而是等当前广播完成后再执行新的广播。&lt;/p&gt;
+&lt;h3 id=&#34;-方案二事件队列化延迟广播&#34;&gt;✅ 方案二：&lt;strong&gt;事件队列化（延迟广播）&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;另一种方式是用一个队列存储广播事件，&lt;strong&gt;逐帧或逐层处理&lt;/strong&gt;，不在广播过程中直接调用 listener，而是等当前广播完成后再执行新的广播。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -180,8 +177,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;-建议&#34;&gt;✅ 建议
-&lt;/h3&gt;&lt;table&gt;
+&lt;/div&gt;&lt;h2 id=&#34;-建议&#34;&gt;✅ 建议
+&lt;/h2&gt;&lt;table&gt;
   &lt;thead&gt;
       &lt;tr&gt;
           &lt;th&gt;场景&lt;/th&gt;
@@ -203,8 +200,8 @@
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h3 id=&#34;-高级优化最大递归层级限制保护机制&#34;&gt;✅ 高级优化：最大递归层级限制（保护机制）
-&lt;/h3&gt;&lt;p&gt;可以增加一个最大层级深度：&lt;/p&gt;
+&lt;h2 id=&#34;-高级优化最大递归层级限制保护机制&#34;&gt;✅ 高级优化：最大递归层级限制（保护机制）
+&lt;/h2&gt;&lt;p&gt;可以增加一个最大层级深度：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -348,7 +345,6 @@
 </description>
         </item>
         <item>
->>>>>>> 469b67fd8ea9291999af726a97dabd0192c7997b
         <title>Push With Different Account</title>
         <link>http://localhost:1313/p/push-with-different-account/</link>
         <pubDate>Wed, 14 May 2025 04:57:39 +0800</pubDate>
