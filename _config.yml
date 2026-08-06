@@ -13,7 +13,7 @@ timezone: Asia/Shanghai
 # URL 配置（部署后改成你的实际地址）
 ## 如果部署在 username.github.io 根目录，url 填 https://username.github.io
 ## 如果部署在 username.github.io/blog，url 填 https://username.github.io/blog，并设置 root: /blog/
-url: https://lzzlli.github.io
+url: https://dolly1221.github.io
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
