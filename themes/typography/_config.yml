@@ -1,0 +1,27 @@
+# 主标题（导航/侧边栏大字）
+title_primary: "lzzlli"
+# 副标题（导航/侧边栏小字）
+title_secondary: "学习笔记"
+keywords: 游戏开发, TypeScript, UE, puerTS
+
+# 社交账号（留空则不显示图标）
+twitter:
+rss: atom.xml
+weibo:
+instagram:
+github: dolly1221
+
+# 评论服务（留空禁用）
+livere:
+disqus:
+dove: true # 暂时禁用评论
+
+# 页面指示器
+showPageCount: true
+
+# 文章标题后显示分类和标签
+showCategories: true
+showTags: true
+
+# 配色方案: light / dark
+themeStyle: light

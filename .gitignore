@@ -6,8 +6,9 @@ db.json
 # 依赖
 node_modules/
 
-# 主题（用 npm 安装，不入库）
-themes/
+# 主题：Typography 通过 git clone 安装，需入库（排除其内部 .git）
+themes/typography/.git/
+themes/typography/.gitignore
 
 # 系统文件
 .DS_Store
