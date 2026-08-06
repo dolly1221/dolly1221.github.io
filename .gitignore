@@ -1,0 +1,25 @@
+# Hexo 构建产物
+public/
+db.json
+.deploy_git/
+
+# 依赖
+node_modules/
+
+# 主题（用 npm 安装，不入库）
+themes/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+*.log
+
+# 不发布到公开仓库的内容（含工作内部信息）
+TIKIstar BUG/
+TIKIstar 需求/
+TIKI STAR NOTEPAD.md
+assets/TIKI STAR NOTEPAD/
+_Self/未发布/
+_TMP/Untitled.base
+_TMP/IMG_*.png
+_TMP/Pasted image *.png

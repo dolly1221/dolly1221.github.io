@@ -1,0 +1,7 @@
+{
+  "strictLineBreaks": true,
+  "readableLineLength": false,
+  "showLineNumber": true,
+  "newLinkFormat": "shortest",
+  "useMarkdownLinks": true
+}

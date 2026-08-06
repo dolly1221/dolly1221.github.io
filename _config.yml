@@ -1,0 +1,85 @@
+# Hexo 配置
+## 文档: https://hexo.io/zh-cn/docs/configuration.html
+
+# 站点配置
+title: lzzlli 的学习笔记
+subtitle: 游戏开发技术沉淀
+description: 个人游戏开发学习笔记博客
+keywords: 游戏开发, TypeScript, UE, puerTS, 红点系统
+author: lzzlli
+language: zh-CN
+timezone: Asia/Shanghai
+
+# URL 配置（部署后改成你的实际地址）
+## 如果部署在 username.github.io 根目录，url 填 https://username.github.io
+## 如果部署在 username.github.io/blog，url 填 https://username.github.io/blog，并设置 root: /blog/
+url: https://lzzlli.github.io
+root: /
+permalink: :year/:month/:day/:title/
+permalink_defaults:
+pretty_urls:
+  trailing_index: true
+  trailing_html: true
+
+# 目录
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+
+# 写作
+new_post_name: :title.md
+default_layout: post
+titlecase: false
+external_link:
+  enable: true
+  field: site
+  exclude: ''
+filename_case: 0
+render_drafts: false
+post_asset_folder: true
+relative_link: false
+future: true
+syntax_highlighter: highlight.js
+include: 
+exclude: 
+ignore:
+
+# marked 渲染器：把文章内的相对图片路径自动指向文章资源文件夹
+marked:
+  prependRoot: true
+  postAsset: true
+
+# 首页分页
+index_generator:
+  path: ''
+  per_page: 10
+  order_by: -date
+
+# 分类 & 标签
+default_category: uncategorized
+category_map:
+tag_map:
+
+# 元数据
+meta_generator: true
+
+# 日期/时间格式
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+updated_option: 'mtime'
+
+# 分页
+per_page: 10
+pagination_dir: page
+
+# 主题
+theme: butterfly
+
+# 部署（使用 GitHub Actions，此处留空）
+deploy:
+  type: ''
