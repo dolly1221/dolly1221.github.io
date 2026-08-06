@@ -15,6 +15,10 @@ themes/typography/.gitignore
 Thumbs.db
 *.log
 
+# Obsidian 本机状态（各电脑独立，避免合并冲突）
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+
 # 不发布到公开仓库的内容（含工作内部信息）
 TIKIstar BUG/
 TIKIstar 需求/
