@@ -1,6 +1,6 @@
 ---
 title: "MutualAidStationSystem_架构说明书"
-date: 2026-08-04 17:40:58
+date: 2026-08-06 17:59:58
 categories:
   - TIKIstar 学习
 tags:
@@ -578,20 +578,20 @@ checkifOrderUnlock()
 
 ### 6.1 定时器清单
 
-| 定时器 | 类型 | 间隔 | 用途 |
-|---|---|---|---|
-| `_nextDayUpdateEntrustsTimer` | setInterval | 10000ms (10s) | 轮询检测是否接近 0 点 |
-| `_midnightRequestTimer` | setTimeout | 动态 | 0 点后延迟请求 + 重试 |
-| `RefreshShowTimer` (UI 层) | setInterval | 1000ms (1s) | 订单倒计时本地递减 |
-| `checkCouldSubMitInterval` (TS_MutualAidStation) | setInterval | 2000ms (2s) | 3D 建筑可提交状态检测 |
+| 定时器                                              | 类型          | 间隔            | 用途            |
+| ------------------------------------------------ | ----------- | ------------- | ------------- |
+| `_nextDayUpdateEntrustsTimer`                    | setInterval | 10000ms (10s) | 轮询检测是否接近 0 点  |
+| `_midnightRequestTimer`                          | setTimeout  | 动态            | 0 点后延迟请求 + 重试 |
+| `RefreshShowTimer` (UI 层)                        | setInterval | 1000ms (1s)   | 订单倒计时本地递减     |
+| `checkCouldSubMitInterval` (TS_MutualAidStation) | setInterval | 2000ms (2s)   | 3D 建筑可提交状态检测  |
 
 ### 6.2 时间源
 
-| 方法 | 返回值 | 来源 | 用途 |
-|---|---|---|---|
-| `getServerTime()` | bigint (毫秒) | `TimeSyncServerSystem` | 日志/参考 |
-| `getLocalTime()` | number (毫秒) | `Date.now()` | **实际倒计时计算** |
-| `getNextDayUpdateEntrustTime()` | number (秒) | 本地时间计算距次日 0 点 | 每日刷新定时器 |
+| 方法                              | 返回值         | 来源                     | 用途          |
+| ------------------------------- | ----------- | ---------------------- | ----------- |
+| `getServerTime()`               | bigint (毫秒) | `TimeSyncServerSystem` | 日志/参考       |
+| `getLocalTime()`                | number (毫秒) | `Date.now()`           | **实际倒计时计算** |
+| `getNextDayUpdateEntrustTime()` | number (秒)  | 本地时间计算距次日 0 点          | 每日刷新定时器     |
 
 > ⚠️ 注意：倒计时实际使用**本地时间** `Date.now()` 计算，而非服务器同步时间。`getServerTime()` 虽然存在但仅用于日志。这会导致客户端时间不准时倒计时偏差。
 
@@ -622,29 +622,29 @@ checkifOrderUnlock()
 
 ### 7.1 架构层面
 
-| # | 问题 | 影响 | 改进建议 |
-|---|---|---|---|
-| A1 | **Model 初始为空，首次打开才拉取数据** | `enter()` 中 `generateModel()` 被注释，首次打开界面时才拉数据，存在等待延迟 | 在 `enter()` 或场景就绪时预拉取，打开界面时直接展示 |
-| A2 | **解锁检测双轨制不一致** | HUD 用 RPC `getBuildedCountByItemID` 查解锁，System 用本地 `landActor.BuiltItemArray` 查解锁，两个途径可能不同步（断线重连 bug 根因） | 统一解锁检测入口，或 HUD 直接调用 `checkifOrderUnlock()` |
-| A3 | **无断线重连恢复机制** | `MutualAidStationSystem` 没有实现 `onReconnectSuccess`，重连后 Model 可能脏数据 | 增加 `onReconnectSuccess` 回调，重连后重新 `generateModel()` |
-| A4 | **`generateModel` 被多处调用但无防重入** | 快速双击入口可能并发拉取 | 增加 `_isLoading` 标志位防重入 |
+| #   | 问题                             | 影响                                                                                                       | 改进建议                                               |
+| --- | ------------------------------ | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| A1  | **Model 初始为空，首次打开才拉取数据**       | `enter()` 中 `generateModel()` 被注释，首次打开界面时才拉数据，存在等待延迟                                                     | 在 `enter()` 或场景就绪时预拉取，打开界面时直接展示                    |
+| A2  | **解锁检测双轨制不一致**                 | HUD 用 RPC `getBuildedCountByItemID` 查解锁，System 用本地 `landActor.BuiltItemArray` 查解锁，两个途径可能不同步（断线重连 bug 根因） | 统一解锁检测入口，或 HUD 直接调用 `checkifOrderUnlock()`         |
+| A3  | **无断线重连恢复机制**                  | `MutualAidStationSystem` 没有实现 `onReconnectSuccess`，重连后 Model 可能脏数据                                       | 增加 `onReconnectSuccess` 回调，重连后重新 `generateModel()` |
+| A4  | **`generateModel` 被多处调用但无防重入** | 快速双击入口可能并发拉取                                                                                             | 增加 `_isLoading` 标志位防重入                             |
 
 ### 7.2 数据层面
 
-| # | 问题 | 影响 | 改进建议 |
-|---|---|---|---|
-| B1 | **倒计时用本地时间而非服务器时间** | 客户端改系统时间可绕过冷却 | 倒计时计算应使用 `getServerTime()` 而非 `getLocalTime()` |
-| B2 | **`initModel` 手动逐字段清零** | 新增字段容易遗漏清理，代码冗长 | 直接重建 observable 对象 `this._mutualAidStationModel = observable({...})` |
-| B3 | **`onMutualAidStationEntrustsChanged` 与 `generateModel` 逻辑重复** | 两个方法都有"逐条构建 entrust"的逻辑，维护时容易不同步 | 提取公共的 `applyServerData(data)` 方法 |
-| B4 | **`forceUpdateItemData` 中 `items.concat` 未赋值** | `concat` 返回新数组不修改原数组，Custom 模式物品 ID 实际没被加入查询列表 | 改为 `items.push(...entrust.submit.SpecifyItemIds)` |
+| #   | 问题                                                             | 影响                                             | 改进建议                                                                 |
+| --- | -------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------- |
+| B1  | **倒计时用本地时间而非服务器时间**                                            | 客户端改系统时间可绕过冷却                                  | 倒计时计算应使用 `getServerTime()` 而非 `getLocalTime()`                       |
+| B2  | **`initModel` 手动逐字段清零**                                        | 新增字段容易遗漏清理，代码冗长                                | 直接重建 observable 对象 `this._mutualAidStationModel = observable({...})` |
+| B3  | **`onMutualAidStationEntrustsChanged` 与 `generateModel` 逻辑重复** | 两个方法都有"逐条构建 entrust"的逻辑，维护时容易不同步               | 提取公共的 `applyServerData(data)` 方法                                     |
+| B4  | **`forceUpdateItemData` 中 `items.concat` 未赋值**                 | `concat` 返回新数组不修改原数组，Custom 模式物品 ID 实际没被加入查询列表 | 改为 `items.push(...entrust.submit.SpecifyItemIds)`                    |
 
 ### 7.3 时间管理
 
-| # | 问题 | 影响 | 改进建议 |
-|---|---|---|---|
-| C1 | **每日刷新时刻硬编码** | `DAILY_REFRESH_HOUR = 0` 写死在代码中，无法配置化 | 移到配置表或全局常量配置 |
-| C2 | **10 秒轮询检测 0 点** | 每 10 秒唤醒一次 timer，虽轻量但不优雅 | 改为 `setTimeout` 精确计算到 0 点的延时，一次触发 |
-| C3 | **`getCountDownWithEndTime` 中 endtime 单位不一致** | `endtime` 是 bigint 时间戳，计算时 `Number(entrust.endtime) - CurTime/1000`，毫秒/秒混用容易出 bug | 统一用秒级或毫秒级，添加单位注释 |
+| #   | 问题                                            | 影响                                                                                | 改进建议                              |
+| --- | --------------------------------------------- | --------------------------------------------------------------------------------- | --------------------------------- |
+| C1  | **每日刷新时刻硬编码**                                 | `DAILY_REFRESH_HOUR = 0` 写死在代码中，无法配置化                                             | 移到配置表或全局常量配置                      |
+| C2  | **10 秒轮询检测 0 点**                              | 每 10 秒唤醒一次 timer，虽轻量但不优雅                                                          | 改为 `setTimeout` 精确计算到 0 点的延时，一次触发 |
+| C3  | **`getCountDownWithEndTime` 中 endtime 单位不一致** | `endtime` 是 bigint 时间戳，计算时 `Number(entrust.endtime) - CurTime/1000`，毫秒/秒混用容易出 bug | 统一用秒级或毫秒级，添加单位注释                  |
 
 ### 7.4 代码质量
 
