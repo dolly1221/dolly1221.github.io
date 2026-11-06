@@ -1,0 +1,59 @@
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <%- partial('_partial/post/gallery') %>
+  <div class="content" itemprop="articleBody">
+      <% if (page.search || page.type === "search") { %>
+        <%- partial('_partial/search') %>
+      <% } else if (page.type === "tags") { %>
+          <div id="tag-cloud">
+            <div class="tag-cloud-title">
+                <% var visibleTags = 0 %>
+                <% site.tags.each(function(tag){ %>
+                  <% if (tag.length) { %>
+                    <% visibleTags += 1 %>
+                  <% } %>
+                <% }) %>
+                <%- _p('counter.tag_cloud', visibleTags) %>
+            </div>
+            <div class="tag-cloud-tags">
+              <%- tagcloud({min_font: 12, max_font: 30, amount: 300}) %>
+            </div>
+          </div>
+        <% } else if (page.type === 'categories') { %>
+          <div id="categories">
+            <div class="category-list-title">
+                <% var visibleCategories = 0 %>
+                <% site.categories.each(function(cat){ %>
+                  <% if (cat.length) { %>
+                    <% visibleCategories += 1 %>
+                  <% } %>
+                <% }) %>
+                <%- _p('counter.categories', visibleCategories) %>
+            </div>
+            <div class="category-list">
+              <%- list_categories() %>
+            </div>
+          </div>
+        <% } else if (page.type === 'daily') { %>
+          <div id="archive">
+            <ul class="post-list">
+              <% var daily_posts = [] %>
+              <% site.posts.each(function(p){ if (p.section === 'daily') daily_posts.push(p); }) %>
+              <% daily_posts.sort(function(a, b){ return b.date.valueOf() - a.date.valueOf(); }) %>
+              <% var daily_year = 0 %>
+              <% daily_posts.forEach(function(post){ %>
+                <% var itemYear = date(post.date, 'YYYY') %>
+                <% if (daily_year !== itemYear) { daily_year = itemYear; %>
+                  <li class="post-year"><h2><%= daily_year %></h2></li>
+                <% } %>
+                <li class="post-item">
+                  <%- partial('_partial/post/date', { post: post, class_name: 'meta' }) %>
+                  <span><%- partial('_partial/post/title', { post: post, index: true, class_name: '' }) %></span>
+                </li>
+              <% }); %>
+            </ul>
+          </div>
+        <% } else { %>
+          <%- page.content %>
+        <% } %>
+  </div>
+</article>

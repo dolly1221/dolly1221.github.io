@@ -1,0 +1,195 @@
+/*
+ * Gruvbox Dark Soft — for hexo-theme-oasis
+ * 在 /css/oasis.css 之后加载，只覆盖颜色，不改主题模板与 stylus 源文件。
+ *
+ * editor.background  #32302f  页面底色
+ * editor.foreground  #ebdbb2  正文
+ * editorWidget / tab #3c3836  代码区、表格、引用
+ * border             #504945  分隔线
+ * accent             #83a598 蓝 / #fabd2f 黄 / #8ec07c 绿
+ */
+
+:root {
+  --hlscrollbar-bg: #504945;
+  --hlnumber-color: #665c54;
+}
+
+html,
+body {
+  background: #32302f !important;
+  color: #ebdbb2 !important;
+}
+
+::selection {
+  background: rgba(104, 157, 106, 0.5);
+  color: #ebdbb2;
+}
+
+nav#menu-inner span {
+  color: #ebdbb2 !important;
+}
+
+nav#menu-inner a,
+aside a,
+div#paginator a,
+div#paginator span {
+  color: #83a598 !important;
+}
+
+nav#menu-inner a:hover,
+div#paginator a:hover {
+  color: #fabd2f !important;
+}
+
+div.post-item p a {
+  color: #ebdbb2 !important;
+}
+
+div.post-item p a:hover {
+  color: #fabd2f !important;
+}
+
+time {
+  color: #a89984 !important;
+}
+
+hr,
+#bottom-inner hr,
+#post hr {
+  background: #504945 !important;
+}
+
+#bottom-inner div a {
+  color: #d5c4a1 !important;
+}
+
+#post {
+  color: #ebdbb2 !important;
+}
+
+#post a {
+  color: #83a598 !important;
+}
+
+#post a:hover {
+  color: #fabd2f !important;
+}
+
+#post table thead tr {
+  background-color: #3c3836 !important;
+  color: #ebdbb2 !important;
+}
+
+#post table tbody tr:nth-of-type(even) {
+  background-color: #3c3836 !important;
+}
+
+#post table tbody tr:last-of-type {
+  border-bottom-color: #504945 !important;
+}
+
+#post blockquote {
+  background: #3c3836 !important;
+  border-left-color: #83a598 !important;
+  color: #d5c4a1 !important;
+}
+
+#post blockquote.pullquote {
+  color: #fabd2f !important;
+}
+
+#post div.post-tags a {
+  color: #fabd2f !important;
+}
+
+#post p code {
+  background: #3c3836 !important;
+  color: #b8bb26 !important;
+}
+
+#post pre,
+pre[class*="language-"] {
+  background: #3c3836 !important;
+  color: #ebdbb2 !important;
+  text-shadow: none !important;
+  border-color: #504945 !important;
+}
+
+code[class*="language-"] {
+  color: #ebdbb2 !important;
+  background: transparent !important;
+  text-shadow: none !important;
+}
+
+pre[class*="language-"] .caption {
+  color: #a89984 !important;
+}
+
+pre[class*="language-"]::selection,
+pre[class*="language-"] ::selection,
+code[class*="language-"]::selection,
+code[class*="language-"] ::selection {
+  background: rgba(104, 157, 106, 0.4) !important;
+  text-shadow: none !important;
+}
+
+/* Prism token 配色，取自 gruvbox-dark-soft.json 的 tokenColors */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #928374 !important;
+  font-style: italic;
+}
+
+.token.punctuation {
+  color: #a89984 !important;
+}
+
+.token.keyword,
+.token.deleted,
+.token.control,
+.token.directive,
+.token.unit {
+  color: #fb4934 !important;
+}
+
+.token.function,
+.token.class-name,
+.token.attr-name,
+.token.decorator,
+.token.statement,
+.token.regex,
+.token.atrule,
+.token.placeholder,
+.token.variable {
+  color: #fabd2f !important;
+}
+
+.token.string,
+.token.char,
+.token.attr-value,
+.token.inserted {
+  color: #b8bb26 !important;
+}
+
+.token.number,
+.token.boolean,
+.token.constant,
+.token.symbol {
+  color: #d3869b !important;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.token.tag,
+.token.selector,
+.token.property {
+  color: #8ec07c !important;
+}
+
+.token.builtin,
+.token.important {
+  color: #fe8019 !important;
+}

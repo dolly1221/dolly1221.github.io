@@ -1,10 +1,12 @@
 ---
 title: "仿 PlayerInfoDetail 界面作业练习"
-date: 2026-02-11 18:39:19
+date: 2026-09-19 19:26:07
+section: blog
 categories:
   - TIKIstar 学习
 tags:
   - TIKIstar 学习
+show_header: false
 ---
 
 ## 原有界面分析

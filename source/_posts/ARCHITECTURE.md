@@ -1,10 +1,12 @@
 ---
 title: "ARCHITECTURE"
-date: 2026-08-17 18:01:21
+date: 2026-11-07 03:18:28
+section: blog
 categories:
   - TIKIstar 学习
 tags:
   - TIKIstar 学习
+show_header: false
 ---
 # 个人信息系统数据源架构说明
 

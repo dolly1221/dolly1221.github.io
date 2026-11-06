@@ -1,10 +1,12 @@
 ---
 title: "Multithread"
-date: 2026-07-27 21:23:49
+date: 2026-09-19 19:26:07
+section: blog
 categories:
   - TIKIstar 学习
 tags:
   - TIKIstar 学习
+show_header: false
 ---
 ## 二、项目自建的多线程（C++ FRunnable）
 ### 2.1 Puerts AsyncModulePreloader — JS 模块异步预加载

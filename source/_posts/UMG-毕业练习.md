@@ -1,10 +1,12 @@
 ---
 title: "UMG 毕业练习"
-date: 2026-02-02 20:34:11
+date: 2026-09-19 19:26:07
+section: blog
 categories:
   - _TMP
 tags:
   - _TMP
+show_header: false
 ---
 ![[Pasted image 20260202151515.png]]
 

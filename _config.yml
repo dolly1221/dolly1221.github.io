@@ -76,8 +76,12 @@ updated_option: 'mtime'
 per_page: 10
 pagination_dir: page
 
-# ============ Typography 主题相关配置 ============
-theme: typography
+# ============ 主题配置 ============
+theme: cactus
+
+# 使用 Cactus 自带的 dark 配色，写在站点侧以免更新主题时被覆盖
+theme_config:
+  colorscheme: dark
 
 # 代码高亮：关闭默认 highlight，使用 prism_plugin
 highlight:

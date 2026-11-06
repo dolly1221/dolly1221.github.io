@@ -1,10 +1,12 @@
 ---
 title: "HEAD_ICON_FRAME_RED_DOT_INTEGRATION"
-date: 2026-08-18 19:28:08
+date: 2026-11-07 03:18:28
+section: blog
 categories:
   - TIKIstar 学习
 tags:
   - TIKIstar 学习
+show_header: false
 ---
 # 头像框红点对接说明（前端 → 后端）
 

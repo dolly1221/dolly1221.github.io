@@ -1,10 +1,12 @@
 ---
 title: "UMG DEMO"
-date: 2026-02-04 18:55:04
+date: 2026-09-19 19:26:07
+section: blog
 categories:
   - _TMP
 tags:
   - _TMP
+show_header: false
 ---
 
 ### 在 UE 里创建 Widget Blueprint

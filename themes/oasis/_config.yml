@@ -1,0 +1,21 @@
+# html lang
+language: en
+
+# main menu navigation
+menu:
+  Home: /
+  Archives: /archives
+  Categories: /categories
+  Tags: /tags
+
+# stylesheets loaded in the <head>
+stylesheets:
+  - /css/oasis.css
+  - /css/gruvbox.css
+
+# scripts loaded in the end of the body
+scripts:
+  - /js/oasis.js
+
+logo:
+  - ./asset/logo.JPG
