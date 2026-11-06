@@ -1,0 +1,223 @@
+/*
+ * Gruvbox Dark Soft — 对齐 CodeBuddy 当前配色 (workbench.colorTheme)
+ * 在 style-dark.css 之后加载，只覆盖颜色；light / dark 方案保持不变。
+ *
+ * editor.background   #32302f  页面底色
+ * editor.foreground   #ebdbb2  正文
+ * editorWidget / tab  #3c3836  面板、代码区
+ * border              #504945  分隔线
+ * accent              #fabd2f 黄 / #8ec07c 绿 / #83a598 蓝
+ *                     #fb4934 红 / #b8bb26 黄绿 / #d3869b 紫
+ */
+
+html,
+body,
+span,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #ebdbb2;
+}
+
+html,
+body {
+  background-color: #32302f;
+}
+
+.foreground {
+  background: #ebdbb2 !important;
+}
+
+.background {
+  background: #32302f !important;
+}
+
+.foreground-text * {
+  color: #ebdbb2 !important;
+}
+
+.background-text * {
+  color: #32302f !important;
+}
+
+::selection {
+  background: rgba(104, 157, 106, 0.5);
+  color: #ebdbb2;
+}
+
+.site-title {
+  border-left-color: #fabd2f;
+}
+
+.site-title:hover {
+  color: #32302f !important;
+  background: #fabd2f !important;
+  border-left-color: #fabd2f;
+}
+
+.site-title:hover * {
+  color: #32302f !important;
+}
+
+.site-title-links a {
+  border-bottom-color: #ebdbb2;
+}
+
+a {
+  color: #ebdbb2;
+  border-bottom-color: #fabd2f;
+}
+
+a:hover {
+  color: #32302f !important;
+  background-color: #fabd2f;
+  border-bottom-color: transparent;
+}
+
+a:focus {
+  color: #a89984;
+}
+
+.current {
+  border-bottom-color: #8ec07c !important;
+}
+
+.a-mute,
+.a-mute:hover,
+.a-mute:focus {
+  color: #ebdbb2 !important;
+}
+
+.soc a:hover,
+.soc a:focus {
+  color: #fabd2f !important;
+}
+
+blockquote {
+  border-left: 4px solid #83a598;
+  background: #3c3836;
+  color: #d5c4a1;
+}
+
+hr {
+  border-top-color: #504945;
+}
+
+table,
+th,
+td {
+  border-color: #504945 !important;
+}
+
+@media (max-width: 768px) {
+  .site-title:hover,
+  .site-title:hover * {
+    color: #ebdbb2 !important;
+    background: transparent !important;
+  }
+}
+
+/* 代码区：对应 IDE 的 tab.activeBackground / editorWidget.background */
+pre,
+pre[class*="language-"],
+figure.highlight,
+.highlight {
+  background: #3c3836 !important;
+  color: #ebdbb2 !important;
+  text-shadow: none !important;
+  border-color: #504945 !important;
+}
+
+code[class*="language-"] {
+  color: #ebdbb2 !important;
+  background: transparent !important;
+  text-shadow: none !important;
+}
+
+:not(pre) > code {
+  background: #3c3836 !important;
+  color: #8ec07c !important;
+}
+
+.line-numbers-rows {
+  border-right-color: #504945 !important;
+}
+
+.line-numbers-rows > span:before {
+  color: #665c54 !important;
+}
+
+/* Prism token 配色，取自 gruvbox-dark-soft.json 的 tokenColors */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #928374 !important;
+  font-style: italic;
+}
+
+.token.punctuation {
+  color: #a89984 !important;
+}
+
+.token.keyword,
+.token.deleted {
+  color: #fb4934 !important;
+}
+
+.token.function,
+.token.class-name,
+.token.attr-name,
+.token.decorator {
+  color: #fabd2f !important;
+}
+
+.token.string,
+.token.char,
+.token.attr-value,
+.token.inserted {
+  color: #b8bb26 !important;
+}
+
+.token.number,
+.token.boolean,
+.token.constant,
+.token.symbol {
+  color: #d3869b !important;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.token.variable,
+.token.tag,
+.token.selector {
+  color: #8ec07c !important;
+}
+
+.token.property {
+  color: #689d6a !important;
+}
+
+.token.atrule,
+.token.regex,
+.token.important,
+.token.builtin {
+  color: #fe8019 !important;
+}
+
+figure .code pre {
+  border-left-color: #504945 !important;
+}
+
+pre[class*="language-"]::selection,
+pre[class*="language-"] ::selection,
+code[class*="language-"]::selection,
+code[class*="language-"] ::selection {
+  background: rgba(104, 157, 106, 0.4) !important;
+  text-shadow: none !important;
+}

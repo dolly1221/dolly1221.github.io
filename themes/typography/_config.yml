@@ -23,5 +23,5 @@ showPageCount: true
 showCategories: true
 showTags: true
 
-# 配色方案: light / dark
-themeStyle: light
+# 配色方案: light / dark / gruvbox（Gruvbox Dark Soft）
+themeStyle: gruvbox
