@@ -20,11 +20,12 @@ Thumbs.db
 .obsidian/workspace-mobile.json
 
 # 不发布到公开仓库的内容（含工作内部信息）
+# 笔记内容已收进 notes/，带路径的规则必须跟着改，否则会失效
 TIKIstar BUG/
 TIKIstar 需求/
 TIKI STAR NOTEPAD.md
-assets/TIKI STAR NOTEPAD/
-_Self/未发布/
-_TMP/Untitled.base
-_TMP/IMG_*.png
-_TMP/Pasted image *.png
+notes/assets/TIKI STAR NOTEPAD/
+notes/_Self/未发布/
+notes/_TMP/Untitled.base
+notes/_TMP/IMG_*.png
+notes/_TMP/Pasted image *.png

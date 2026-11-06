@@ -1,6 +1,6 @@
 /**
  * sync-posts.js
- * 将源笔记目录中的 Markdown 同步到 Hexo 的 source/_posts，
+ * 将 notes/ 下的源笔记同步到 Hexo 的 source/_posts，
  * 自动完成：源文档 header 合并、图片路径修正、IDE 跳转链接清理、front-matter 生成。
  *
  * 用法：node scripts/sync-posts.js
@@ -11,18 +11,23 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const POSTS_DIR = path.join(ROOT, 'source', '_posts');
 
-// ========== 可配置：要发布的学习笔记源目录（section: blog）==========
-// 在此增删目录即可控制 blog 的发布范围；BUG/需求类不放入即不会发布
+// ========== 可配置：笔记内容统一收在 notes/ 下 ==========
+// 增删目录即可控制 blog 发布范围；路径相对仓库根
 const SOURCE_DIRS = [
-  'TIKIstar 学习',
-  '_Self',
-  'NBA2 学习',
-  '_TMP',
+  'notes/TIKIstar 学习',
+  'notes/_Self',
+  'notes/NBA2 学习',
+  'notes/_TMP',
 ];
 
-// 日常想法目录（section: daily）：位于 _Self 下，遍历 _Self 时会跳过它
+// 日常想法目录（section: daily）：遍历 _Self 时会跳过它
 const DAILY_DIRS = [
-  '_Self/daily',
+  'notes/_Self/daily',
+];
+
+// 额外的图片索引目录（各笔记目录内的 assets/ 会随源目录递归扫描）
+const ASSET_DIRS = [
+  'notes/assets',
 ];
 // =========================================================
 
@@ -85,6 +90,25 @@ function buildImageIndex(dirs) {
 function makeSlug(relPath) {
   const base = path.basename(relPath, '.md');
   return base.replace(SLUG_REPLACE, '').trim().replace(/\s+/g, '-') || 'untitled';
+}
+
+/* ---------- 既有文章日期 ---------- */
+
+// 读取上一轮生成文章的 date。移动/编辑笔记或 CI checkout 会刷新 mtime，
+// 若不沿用旧日期，permalink 的 /年/月/日/ 段会变化，已发布文章会 404。
+// 优先级：源 md 的 header date > 已有文章 date > 文件 mtime。
+function readExistingDates() {
+  const map = new Map();
+  if (!fs.existsSync(POSTS_DIR)) return map;
+  for (const name of fs.readdirSync(POSTS_DIR)) {
+    if (!name.endsWith('.md')) continue;
+    try {
+      const text = fs.readFileSync(path.join(POSTS_DIR, name), 'utf8');
+      const m = /^date:\s*"?([^"\r\n]+?)"?\s*$/m.exec(text);
+      if (m) map.set(name, m[1].trim());
+    } catch (e) { /* ignore */ }
+  }
+  return map;
 }
 
 /* ---------- 源文档 header ---------- */
@@ -155,6 +179,12 @@ function frontMatter(title, date, category, section, fields) {
   const pad = n => String(n).padStart(2, '0');
   const ds = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 
+  // 标准时间戳保持裸写（与历史产物一致），其它写法加引号避免 YAML 误解析
+  const dateVal = fields.date || ds;
+  const safeDate = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(dateVal)
+    ? dateVal
+    : JSON.stringify(dateVal);
+
   // 开关默认 false：header 只作记录，不在页面上展示
   const showHeader = String(fields.show_header || '').toLowerCase() === 'true';
   const custom = Object.keys(fields)
@@ -163,7 +193,7 @@ function frontMatter(title, date, category, section, fields) {
 
   let out = '---\n';
   out += `title: ${JSON.stringify(title)}\n`;
-  out += `date: ${fields.date ? JSON.stringify(fields.date) : ds}\n`;
+  out += `date: ${safeDate}\n`;
   out += `section: ${section}\n`;
   out += `categories:\n  - ${category}\n`;
   out += `tags:\n  - ${category}\n`;
@@ -182,9 +212,9 @@ function main() {
   const groups = [
     ...SOURCE_DIRS.map(dir => ({
       dir,
-      category: dir,
+      category: path.basename(dir),
       section: 'blog',
-      skipDirs: dir === '_Self' ? ['daily'] : [],
+      skipDirs: path.basename(dir) === '_Self' ? ['daily'] : [],
     })),
     ...DAILY_DIRS.map(dir => ({
       dir,
@@ -196,13 +226,16 @@ function main() {
 
   console.log('▶ 同步源目录:', groups.map(g => `${g.dir} (${g.section})`).join(', '));
 
+  // 必须在清空 _posts 之前读取既有日期
+  const existingDates = readExistingDates();
+
   // 重建 _posts
   rmrf(POSTS_DIR);
   ensureDir(POSTS_DIR);
   fs.writeFileSync(path.join(POSTS_DIR, 'README.md'),
     '# 此目录由 sync-posts.js 自动生成，请勿手动编辑。\n');
 
-  const imageIndex = buildImageIndex([...SOURCE_DIRS, ...DAILY_DIRS]);
+  const imageIndex = buildImageIndex([...SOURCE_DIRS, ...DAILY_DIRS, ...ASSET_DIRS]);
   console.log(`▶ 图片索引: ${imageIndex.size} 个图片文件`);
 
   let total = 0, imgsCopied = 0, imgsMissing = 0;
@@ -235,8 +268,14 @@ function main() {
       imgsCopied += r.copied;
       imgsMissing += r.missing;
 
+      const fields = { ...parsed.fields };
+      if (!fields.date) {
+        const prev = existingDates.get(`${slug}.md`);
+        if (prev) fields.date = prev;
+      }
+
       const stat = fs.statSync(full);
-      const fm = frontMatter(baseName, stat.mtime, g.category, g.section, parsed.fields);
+      const fm = frontMatter(baseName, stat.mtime, g.category, g.section, fields);
       fs.writeFileSync(path.join(POSTS_DIR, `${slug}.md`), fm + md, 'utf8');
       total++;
     }, g.skipDirs);
